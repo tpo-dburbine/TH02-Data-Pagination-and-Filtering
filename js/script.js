@@ -44,8 +44,6 @@ function showPage(list, page) {
             </li>`;
          studentListUL.insertAdjacentHTML('beforeend', studentHTML);
       }
-     
-      console.log(studentHTML)
    }
 }
 
