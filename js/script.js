@@ -21,6 +21,7 @@ This function will create and insert/append the elements needed to display a "pa
 
 
 const studentListUL = document.querySelector('.student-list')
+const linkList = document.querySelector('.link-list')
 const itemsPerPage = 9
 
 
@@ -28,7 +29,6 @@ function showPage(list, page) {
    const startIndex = (page - 1) * itemsPerPage
    const endIndex = startIndex + itemsPerPage
    let studentHTML
-
 
    for (let i = 0; i < list.length; i++) {
       if (i >= startIndex && i < endIndex) {
@@ -41,8 +41,8 @@ function showPage(list, page) {
                <div class="joined-details">
                   <span class="date">Joined ${list[i].registered.date}</span>
                </div>
-            </li>`;
-         studentListUL.insertAdjacentHTML('beforeend', studentHTML);
+            </li>`
+         studentListUL.insertAdjacentHTML('beforeend', studentHTML)
       }
    }
 }
@@ -54,8 +54,45 @@ Create the `addPagination` function
 This function will create and insert/append the elements needed for the pagination buttons
 */
 
+function addPagination(list) {
+   let pages = Math.ceil(list.length / itemsPerPage)
+   linkList.innerHTML = ''
+   let buttons
+   //let a = document.createElement('a')
+   //let link = document.getElementsByTagName('button')
+   //a.title = i
+   //a.href = '#'
+   //a.appendChild(link)
+   
+
+
+   for (let i = 1; i <= pages; i++) {
+      buttons = `
+         <li>
+            <button type="button">${i}</button>
+         </li>`
+      linkList.insertAdjacentHTML('beforeend', buttons)
+
+   }
+
+   
+   const initialButton = document.querySelector('button:first-child')
+   if (initialButton) {
+      initialButton.classList.add('active')
+   }
+
+   linkList.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') {
+         let prevButton = document.querySelector('.active')
+         prevButton.className = ''
+         let pageNum = e.target.textContent
+         e.target.className = 'active'
+         showPage(list, pageNum)
+      }
+   })
+}
 
 
 // Call functions
 showPage(data, 1)
-
+addPagination(data)
