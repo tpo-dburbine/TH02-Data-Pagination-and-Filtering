@@ -35,33 +35,32 @@ header.insertAdjacentHTML('beforeend', searchBarHTML)
 
 //function to dynamically filter search results as user inputs characters
 function filterSearch(list) {
-   //event listener for 'keyup' 
-   header.addEventListener('keyup', () => {
-      //initialize empty string
-      let searchStudents = []
-      //create var 'input' to select ID search
-      const input = document.querySelector('#search').value.toLowerCase()
+   //initialize empty string
+   let searchStudents = []
+   //create var 'input' to select ID search
+   const input = document.querySelector('#search').value.toLowerCase()
 
-      //for loop to loop through data array
-      for(let i = 0; i < list.length; i++) {
-         //variable set to equal title, firstname, and lastname in data array
-         let title = list[i].name.title
-         let firstName = list[i].name.first
-         let lastName = list[i].name.last
-         //create string literal to combine variables and set equal to studentName var
-         let studentName = `${title} ${firstName} ${lastName}`.toLowerCase()
+   //for loop to loop through data array
+   for(let i = 0; i < list.length; i++) {
+      //variable set to equal title, firstname, and lastname in data array
+      let title = list[i].name.title
+      let firstName = list[i].name.first
+      let lastName = list[i].name.last
+      //create string literal to combine variables and set equal to studentName var
+      let studentName = `${title} ${firstName} ${lastName}`.toLowerCase()
 
-         //conditional to check if full studentName var includes user input
-         //push names that include user input from data array to empty SearchStudents array
-         if(studentName.includes(input)) {
-            searchStudents.push(list[i])
-         } 
-      //function calls to display page and add pagination
-      showPage(searchStudents, 1)
-      addPagination(searchStudents)
-      }
-   })
+      //conditional to check if full studentName var includes user input
+      //push names that include user input from data array to empty SearchStudents array
+      if(studentName.includes(input)) {
+         searchStudents.push(list[i])
+      } 
+   //function calls to display page and add pagination
+   showPage(searchStudents, 1)
+   addPagination(searchStudents)
+   }
 }
+
+
 
 //showPage function used to add list of students to page
 function showPage(list, page) {
@@ -111,18 +110,24 @@ function addPagination(list) {
             <button type="button">${i}</button>
          </li>`
       linkList.insertAdjacentHTML('beforeend', buttons)
-      document.querySelector('li button').className = 'active'
    }
-   //event listener for clicking pagination buttons
-   linkList.addEventListener('click', (e) => {
-      if (e.target.tagName === 'BUTTON') {
-         document.querySelector('.active').className = ''
-         let pageNum = e.target.textContent
-         e.target.className = 'active'
-         showPage(list, pageNum)
-      }
-   })
 }
+
+//-----------------------------------------------------------------------------
+
+//event listener for 'keyup'
+header.addEventListener('keyup', () => {
+   filterSearch(data)
+})
+
+//event listener for clicking pagination buttons
+linkList.addEventListener('click', (e) => {
+   if (e.target.tagName === 'BUTTON') {
+      let pageNum = e.target.textContent
+      e.target.className = 'active'
+      showPage(data, pageNum)
+   }
+})
 
 // Call functions
 showPage(data, 1)
