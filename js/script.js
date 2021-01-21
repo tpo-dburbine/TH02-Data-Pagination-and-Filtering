@@ -24,6 +24,7 @@ This function will create and insert/append the elements needed to display a "pa
 const studentListUL = document.querySelector('ul.student-list')
 const linkList = document.querySelector('ul.link-list')
 const itemsPerPage = 9
+let activeButtonIndex = 0
 
 //adding the search bar to html
 const header = document.querySelector('header')
@@ -124,7 +125,9 @@ header.addEventListener('keyup', () => {
 linkList.addEventListener('click', (e) => {
    if (e.target.tagName === 'BUTTON') {
       let pageNum = e.target.textContent
+      document.querySelectorAll('ul.link-list button')[activeButtonIndex].className = ''
       e.target.className = 'active'
+      activeButtonIndex = pageNum - 1
       showPage(data, pageNum)
    }
 })
