@@ -20,6 +20,7 @@ This function will create and insert/append the elements needed to display a "pa
 
 
 //global variables
+//const headerHTML = document.querySelector('.header')
 const studentListUL = document.querySelector('ul.student-list')
 const linkList = document.querySelector('ul.link-list')
 const itemsPerPage = 9
@@ -32,6 +33,36 @@ let searchBarHTML = `<label for="search" class="student-search">
                  </label> `
 header.insertAdjacentHTML('beforeend', searchBarHTML)
 
+//function to dynamically filter search results as user inputs characters
+function filterSearch(list) {
+   //event listener for 'keyup' 
+   header.addEventListener('keyup', () => {
+      //initialize empty string
+      let searchStudents = []
+      //create var 'input' to select ID search
+      const input = document.querySelector('#search').value.toLowerCase()
+
+      //for loop to loop through data array
+      for(let i = 0; i < list.length; i++) {
+         //variable set to equal title, firstname, and lastname in data array
+         let title = list[i].name.title
+         let firstName = list[i].name.first
+         let lastName = list[i].name.last
+         //create string literal to combine variables and set equal to studentName var
+         let studentName = `${title} ${firstName} ${lastName}`.toLowerCase()
+
+         //conditional to check if full studentName var includes user input
+         //push names that include user input from data array to empty SearchStudents array
+         if(studentName.includes(input)) {
+            searchStudents.push(list[i])
+         } 
+      //function calls to display page and add pagination
+      showPage(searchStudents, 1)
+      addPagination(searchStudents)
+      }
+   })
+}
+
 //showPage function used to add list of students to page
 function showPage(list, page) {
    const startIndex = (page - 1) * itemsPerPage
@@ -39,9 +70,11 @@ function showPage(list, page) {
    studentListUL.innerHTML =''
    let studentHTML
 
+   //for loop to go through data array and nested conditional to display students within specified index range
    for (let i = 0; i < list.length; i++) {
       if (i >= startIndex && i < endIndex) {
-         studentHTML = `<li class="student-item cf">
+         studentHTML = 
+            `<li class="student-item cf">
                <div class="student-details">
                   <img class="avatar" src="${list[i].picture.large}" alt="Profile Picture">
                   <h3>${list[i].name.title}. ${list[i].name.first} ${list[i].name.last}</h3>
@@ -64,10 +97,14 @@ This function will create and insert/append the elements needed for the paginati
 */
 
 function addPagination(list) {
+   //find number of pages needed
    let pages = Math.ceil(list.length / itemsPerPage)
+   //set linklist to empty string
    linkList.innerHTML = ''
+   //initialize buttons variable
    let buttons
    
+   //loop similar to showPage to add buttons to HTML
    for (let i = 1; i <= pages; i++) {
       buttons = `
          <li>
@@ -76,7 +113,7 @@ function addPagination(list) {
       linkList.insertAdjacentHTML('beforeend', buttons)
       document.querySelector('li button').className = 'active'
    }
-
+   //event listener for clicking pagination buttons
    linkList.addEventListener('click', (e) => {
       if (e.target.tagName === 'BUTTON') {
          document.querySelector('.active').className = ''
@@ -87,7 +124,7 @@ function addPagination(list) {
    })
 }
 
-
 // Call functions
 showPage(data, 1)
 addPagination(data)
+filterSearch(data)
