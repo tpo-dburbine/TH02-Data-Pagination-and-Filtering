@@ -19,15 +19,24 @@ This function will create and insert/append the elements needed to display a "pa
 */
 
 
-
-const studentListUL = document.querySelector('.student-list')
-const linkList = document.querySelector('.link-list')
+//global variables
+const studentListUL = document.querySelector('ul.student-list')
+const linkList = document.querySelector('ul.link-list')
 const itemsPerPage = 9
 
+//adding the search bar to html
+const header = document.querySelector('header')
+let searchBarHTML = `<label for="search" class="student-search">
+                  <input id="search" placeholder="search by name...">
+                  <button type="button"><img src="img/icn-search.svg" alt="Search Icon"></button>
+                 </label> `
+header.insertAdjacentHTML('beforeend', searchBarHTML)
 
+//showPage function used to add list of students to page
 function showPage(list, page) {
    const startIndex = (page - 1) * itemsPerPage
    const endIndex = startIndex + itemsPerPage
+   studentListUL.innerHTML =''
    let studentHTML
 
    for (let i = 0; i < list.length; i++) {
@@ -58,33 +67,19 @@ function addPagination(list) {
    let pages = Math.ceil(list.length / itemsPerPage)
    linkList.innerHTML = ''
    let buttons
-   //let a = document.createElement('a')
-   //let link = document.getElementsByTagName('button')
-   //a.title = i
-   //a.href = '#'
-   //a.appendChild(link)
    
-
-
    for (let i = 1; i <= pages; i++) {
       buttons = `
          <li>
             <button type="button">${i}</button>
          </li>`
       linkList.insertAdjacentHTML('beforeend', buttons)
-
-   }
-
-   
-   const initialButton = document.querySelector('button:first-child')
-   if (initialButton) {
-      initialButton.classList.add('active')
+      document.querySelector('li button').className = 'active'
    }
 
    linkList.addEventListener('click', (e) => {
       if (e.target.tagName === 'BUTTON') {
-         let prevButton = document.querySelector('.active')
-         prevButton.className = ''
+         document.querySelector('.active').className = ''
          let pageNum = e.target.textContent
          e.target.className = 'active'
          showPage(list, pageNum)
