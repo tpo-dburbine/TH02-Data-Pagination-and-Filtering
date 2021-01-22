@@ -28,13 +28,18 @@ let activeButtonIndex = 0
 
 //adding the search bar to html
 const header = document.querySelector('header')
-let searchBarHTML = `<label for="search" class="student-search">
+let searchBarHTML =
+   `<label for="search" class="student-search">
                   <input id="search" placeholder="search by name...">
                   <button type="button"><img src="img/icn-search.svg" alt="Search Icon"></button>
-                 </label> `
+               </label> `
 header.insertAdjacentHTML('beforeend', searchBarHTML)
 
-//function to dynamically filter search results as user inputs characters
+//-----------------------------------------------------------------------------
+//FUNCTIONS
+//-----------------------------------------------------------------------------
+
+
 function filterSearch(list) {
    //initialize empty string
    let searchStudents = []
@@ -42,7 +47,7 @@ function filterSearch(list) {
    const input = document.querySelector('#search').value.toLowerCase()
 
    //for loop to loop through data array
-   for(let i = 0; i < list.length; i++) {
+   for (let i = 0; i < list.length; i++) {
       //variable set to equal title, firstname, and lastname in data array
       let title = list[i].name.title
       let firstName = list[i].name.first
@@ -52,40 +57,44 @@ function filterSearch(list) {
 
       //conditional to check if full studentName var includes user input
       //push names that include user input from data array to empty SearchStudents array
-      if(studentName.includes(input)) {
+      if (studentName.includes(input)) {
          searchStudents.push(list[i])
-      } 
-   //function calls to display page and add pagination
-   showPage(searchStudents, 1)
-   addPagination(searchStudents)
+      }
+      //function calls to display page and add pagination
+      showPage(searchStudents, 1)
+      addPagination(searchStudents)
    }
 }
-
 
 
 //showPage function used to add list of students to page
 function showPage(list, page) {
    const startIndex = (page - 1) * itemsPerPage
    const endIndex = startIndex + itemsPerPage
-   studentListUL.innerHTML =''
+   studentListUL.innerHTML = ''
    let studentHTML
 
-   //for loop to go through data array and nested conditional to display students within specified index range
-   for (let i = 0; i < list.length; i++) {
-      if (i >= startIndex && i < endIndex) {
-         studentHTML = 
-            `<li class="student-item cf">
-               <div class="student-details">
-                  <img class="avatar" src="${list[i].picture.large}" alt="Profile Picture">
-                  <h3>${list[i].name.title}. ${list[i].name.first} ${list[i].name.last}</h3>
-                  <span class="email">${list[i].email}</span>
-               </div>
-               <div class="joined-details">
-                  <span class="date">Joined ${list[i].registered.date}</span>
-               </div>
-            </li>`
-         studentListUL.insertAdjacentHTML('beforeend', studentHTML)
+   if (list.length > 0) {
+      //for loop to go through data array and nested conditional to display students within specified index range
+      for (let i = 0; i < list.length; i++) {
+         if (i >= startIndex && i < endIndex) {
+            studentHTML =
+               `<li class="student-item cf">
+                        <div class="student-details">
+                           <img class="avatar" src="${list[i].picture.large}" alt="Profile Picture">
+                           <h3>${list[i].name.title}. ${list[i].name.first} ${list[i].name.last}</h3>
+                           <span class="email">${list[i].email}</span>
+                        </div>
+                        <div class="joined-details">
+                           <span class="date">Joined ${list[i].registered.date}</span>
+                        </div>
+                     </li>`
+            studentListUL.insertAdjacentHTML('beforeend', studentHTML)
+         }
       }
+   } else {
+      studentHTML = `<li>No results for your search were found. Try again!</li>`
+      studentListUL.insertAdjacentHTML('beforeend', studentHTML)
    }
 }
 
@@ -103,7 +112,7 @@ function addPagination(list) {
    linkList.innerHTML = ''
    //initialize buttons variable
    let buttons
-   
+
    //loop similar to showPage to add buttons to HTML
    for (let i = 1; i <= pages; i++) {
       buttons = `
@@ -114,12 +123,17 @@ function addPagination(list) {
    }
 }
 
+
+
+//-----------------------------------------------------------------------------
+//EVENT LISTENERS
 //-----------------------------------------------------------------------------
 
 //event listener for 'keyup'
 header.addEventListener('keyup', () => {
    filterSearch(data)
 })
+
 
 //event listener for clicking pagination buttons
 linkList.addEventListener('click', (e) => {
@@ -132,7 +146,13 @@ linkList.addEventListener('click', (e) => {
    }
 })
 
-// Call functions
+
+
+//-----------------------------------------------------------------------------
+//FUNCTION CALLS
+//-----------------------------------------------------------------------------
+
 showPage(data, 1)
 addPagination(data)
 filterSearch(data)
+
