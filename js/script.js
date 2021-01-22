@@ -129,6 +129,7 @@ function addPagination(list) {
 //EVENT LISTENERS
 //-----------------------------------------------------------------------------
 
+
 //event listener for 'keyup'
 header.addEventListener('keyup', () => {
    filterSearch(data)
